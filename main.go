@@ -91,11 +91,11 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 
 	claims["admin permissions?"] = "maybeeee"
 	claims["login"] = &Log
-	claims["password"] = &Pass
+
 	claims["Data answer is"] = dataanswer
 	claims["Token request at"] = t
 	claims["ATTENTION!"] = "Привет, Макс :)"
-	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	claims["exp"] = time.Now().Add(time.Minute * 1).Unix()
 	tokenString, err := token.SignedString(mySigningKey)
 	if err != nil {
 		log.Fatal(err)
