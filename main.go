@@ -35,7 +35,7 @@ var ProductsHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	payload, _ := json.Marshal(m)
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(m))
+	w.Write([]byte(paylommad))
 })
 
 var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
