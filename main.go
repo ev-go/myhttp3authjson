@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/auth0/go-jwt-middleware"
+	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/form3tech-oss/jwt-go"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -35,7 +35,7 @@ var ProductsHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	payload, _ := json.Marshal(m)
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(payload))
+	w.Write([]byte(m))
 })
 
 var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
