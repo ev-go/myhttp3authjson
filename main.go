@@ -28,15 +28,7 @@ type Message struct {
 	LastKey     int64
 }
 
-var m []byte
-
-var ProductsHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	// Here we are converting the slice of products to JSON
-	payload, _ := json.Marshal(m)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(payload))
-})
+// var M []byte
 
 var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
 	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
@@ -50,8 +42,8 @@ var Pass string
 
 func main() {
 
-	m := Message{"World", "Hello", Name{"Dmitry", "Victorovich"}, "79082706690", "393181839", 211}
-	fmt.Println(m)
+	// M := Message{"World", "Hello", Name{"Dmitry", "Victorovich"}, "79082706690", "393181839", 211}
+	//fmt.Println(m)
 	// b, err := json.Marshal(m)
 	// fmt.Println(b)
 
@@ -89,7 +81,7 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	autorizationok := Log == login && Pass == password
 	fmt.Println("autorizationok = ", autorizationok)
 
-	claims["admin permissions?"] = "maybeeee"
+	claims["admin permissions?"] = "maybe"
 	claims["login"] = &Log
 
 	claims["Data answer is"] = dataanswer
@@ -111,4 +103,14 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 		fmt.Fprint(w, " access denied ")
 	}
 	// w.Write([]byte(tokenString))
+})
+
+var m = Message{"World", "Hello", Name{"Dmitry", "Victorovich"}, "79082706690", "393181839", 211}
+
+var ProductsHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// Here we are converting the slice of products to JSON
+	payload, _ := json.Marshal(m)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(payload))
 })
