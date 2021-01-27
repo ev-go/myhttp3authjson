@@ -42,11 +42,6 @@ var Pass string
 
 func main() {
 
-	// M := Message{"World", "Hello", Name{"Dmitry", "Victorovich"}, "79082706690", "393181839", 211}
-	//fmt.Println(m)
-	// b, err := json.Marshal(m)
-	// fmt.Println(b)
-
 	fmt.Println("Логин")
 	fmt.Scanf("%s\n", &Log)
 
@@ -102,13 +97,13 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 
 		fmt.Fprint(w, " access denied ")
 	}
-	// w.Write([]byte(tokenString))
+
 })
 
 var m = Message{"World", "Hello", Name{"Dmitry", "Victorovich"}, "79082706690", "393181839", 211}
 
 var ProductsHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	// Here we are converting the slice of products to JSON
+
 	payload, _ := json.Marshal(m)
 
 	w.Header().Set("Content-Type", "application/json")
