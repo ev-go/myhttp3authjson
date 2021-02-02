@@ -1,9 +1,6 @@
-FROM golang:1.14
+FROM golang:alpine
 
-WORKDIR /go/src/app
+WORKDIR /mnt/app
 COPY . .
 
-RUN go get -d -v ./...
-RUN go install -v ./...
-
-CMD ["app"]
+EXPOSE 3000
