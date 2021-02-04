@@ -28,6 +28,11 @@ type Message struct {
 	LastKey     int64
 }
 
+// type user struct {
+// 	Log  string
+// 	Pass string
+// }
+
 // var M []byte
 
 var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
@@ -42,11 +47,14 @@ var Pass string
 
 func main() {
 
-	fmt.Println("Логин")
-	fmt.Scanf("%s\n", &Log)
+	// fmt.Println("Логин")
+	// fmt.Scanf("%s\n", &Log)
 
-	fmt.Println("Пароль")
-	fmt.Scanf("%s\n", &Pass)
+	// fmt.Println("Пароль")
+	// fmt.Scanf("%s\n", &Pass)
+
+	Log = "root"
+	Pass = "1"
 
 	r := mux.NewRouter()
 
