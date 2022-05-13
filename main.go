@@ -33,13 +33,6 @@ type Message struct {
 	LastKey     int64
 }
 
-// type user struct {
-// 	Log  string
-// 	Pass string
-// }
-
-// var M []byte
-
 var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
 	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 		return mySigningKey, nil
@@ -69,11 +62,6 @@ func main() {
 		panic(node)
 	}
 
-	// err = rdb.Set(ctx, "key2", "74", 0).Err()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
 	val, node := rdb.Get(ctx, userid).Result()
 	if node == redis.Nil {
 		fmt.Println("key1 does not exist")
@@ -82,11 +70,6 @@ func main() {
 	} else {
 		fmt.Println(userid, val)
 	}
-	// val, err := rdb.Get(ctx, "key").Result()
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// fmt.Println("key", val)
 
 	val2, node := rdb.Get(ctx, "key2").Result()
 	if node == redis.Nil {
@@ -101,14 +84,8 @@ func main() {
 
 	//redis end
 
-	// fmt.Println("Логин")
-	// fmt.Scanf("%s\n", &Log)
-
-	// fmt.Println("Пароль")
-	// fmt.Scanf("%s\n", &Pass)
-
-	Log = "root"
-	Pass = "1"
+	Log = "root1"
+	Pass = "11"
 
 	r := mux.NewRouter()
 
@@ -123,8 +100,6 @@ func main() {
 var mySigningKey = []byte("secret")
 
 var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
 
 	t := time.Now()
 	login := r.FormValue("login")
@@ -137,6 +112,31 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 
 	autorizationok := Log == login && Pass == password
 	fmt.Println("autorizationok = ", autorizationok)
+
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	newuserid := Log + Pass
+
+	val3, newuserautorizationdata := rdb.Get(ctx, newuserid).Result()
+	if newuserautorizationdata == redis.Nil {
+		fmt.Println("newuserautorizationdata does not exist")
+	} else if newuserautorizationdata != nil {
+		panic(newuserautorizationdata)
+	} else {
+		fmt.Println(newuserid, val3)
+	}
+
+	// newuserautorizationdata := rdb.Set(ctx, newuserid,  tokenString, 0).Err()
+	// if newuserautorizationdata != nil {
+	// 	panic(newuserautorizationdata)
+	// }
+
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
 
 	claims["admin permissions?"] = "maybe"
 	claims["login"] = &Log
@@ -151,22 +151,6 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	}
 
 	fmt.Println("NewToken = ", tokenString)
-
-	// newuserid := Log + Pass
-
-	// newuserautorizationdata := rdb.Set(ctx, newuserid, tokenString, 0).Err()
-	// if newuserautorizationdata != nil {
-	// 	panic(newuserautorizationdata)
-	// }
-
-	// val3, newuserautorizationdata := rdb.Get(ctx, newuserid).Result()
-	// if newuserautorizationdata == redis.Nil {
-	// 	fmt.Println("newuserautorizationdata does not exist")
-	// } else if newuserautorizationdata != nil {
-	// 	panic(newuserautorizationdata)
-	// } else {
-	// 	fmt.Println(newuserid, val3)
-	// }
 
 	tokenFprint := []byte(tokenString)
 
