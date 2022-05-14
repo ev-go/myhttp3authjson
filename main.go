@@ -55,7 +55,7 @@ func main() {
 	})
 
 	userid := "user#125"
-	currentusertoken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBVFRFTlRJT04hIjoi0J_RgNC40LLQtdGCLCDQnNCw0LrRgSA6KSIsIkRhdGEgYW5zd2VyIGlzIjoiMjExIiwiVG9rZW4gcmVxdWVzdCBhdCI6IjIwMjItMDUtMTJUMjI6MDI6MDMuNDIzNTc1NCswNTowMCIsImFkbWluIHBlcm1pc3Npb25zPyI6Im1heWJlIiwiZXhwIjoxNjUyMzc1NTIzLCJsb2dpbiI6InJvb3QifQ.9do8soXtimGxr9TDAd6EI2W0l-95U0SSJD_5GPz4kMA"
+	currentusertoken := "testtoken"
 
 	node := rdb.Set(ctx, userid, currentusertoken, 0).Err()
 	if node != nil {
@@ -84,8 +84,8 @@ func main() {
 
 	//redis end
 
-	Log = "root1"
-	Pass = "11"
+	Log = "root11"
+	Pass = "111"
 
 	r := mux.NewRouter()
 
@@ -111,7 +111,16 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	fmt.Println("User login = ", login, "; Server login = ", Log, "; \nUser password = ", password, "; Server password = ", Pass)
 
 	autorizationok := Log == login && Pass == password
+
 	fmt.Println("autorizationok = ", autorizationok)
+
+	newuserid := ""
+
+	if autorizationok {
+		newuserid = Log + Pass
+	} else {
+		newuserid = "false"
+	}
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
@@ -119,21 +128,7 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 		DB:       0,  // use default DB
 	})
 
-	newuserid := Log + Pass
-
 	val3, newuserautorizationdata := rdb.Get(ctx, newuserid).Result()
-	if newuserautorizationdata == redis.Nil {
-		fmt.Println("newuserautorizationdata does not exist")
-	} else if newuserautorizationdata != nil {
-		panic(newuserautorizationdata)
-	} else {
-		fmt.Println(newuserid, val3)
-	}
-
-	// newuserautorizationdata := rdb.Set(ctx, newuserid,  tokenString, 0).Err()
-	// if newuserautorizationdata != nil {
-	// 	panic(newuserautorizationdata)
-	// }
 
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
@@ -146,13 +141,32 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	claims["ATTENTION!"] = "Привет, Макс :)"
 	claims["exp"] = time.Now().Add(time.Minute * 10).Unix()
 	tokenString, err := token.SignedString(mySigningKey)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("NewToken = ", tokenString)
+	var actualtokenstring string
 
-	tokenFprint := []byte(tokenString)
+	if newuserautorizationdata == redis.Nil {
+		fmt.Println("newuserautorizationdata does not exist")
+		actualtokenstring = tokenString
+
+	} else if newuserautorizationdata != nil {
+		panic(newuserautorizationdata)
+	} else {
+		fmt.Println(newuserid, val3)
+		actualtokenstring = val3
+	}
+
+	currentuserautorizationdata := rdb.Set(ctx, newuserid, actualtokenstring, 0).Err()
+	if currentuserautorizationdata != nil {
+		panic(currentuserautorizationdata)
+	}
+
+	fmt.Println("NewToken = ", actualtokenstring)
+
+	tokenFprint := []byte(actualtokenstring)
 
 	if autorizationok {
 		fmt.Fprint(w, fmt.Sprintf("Token request at [%s]\nUser:\nLogin: '%s'\nPassword: '%s'\nData answer is: %s\n", t.Format(time.RFC3339), login, password, dataanswer))
