@@ -93,8 +93,8 @@ func main() {
 
 	//redis end
 
-	Log = "root11"
-	Pass = "111"
+	Log = "root111"
+	Pass = "1111"
 
 	r := mux.NewRouter()
 
