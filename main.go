@@ -33,6 +33,15 @@ type Message struct {
 	LastKey     int64
 }
 
+type Gettokenanswerstruct struct {
+	TokenRequestAt string
+	User           string
+	Login          string
+	Password       string
+	DataAnswer     string
+	Token          string
+}
+
 var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
 	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 		return mySigningKey, nil
@@ -139,7 +148,7 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	claims["Data answer is"] = dataanswer
 	claims["Token request at"] = t
 	claims["ATTENTION!"] = "Привет, Макс :)"
-	claims["exp"] = time.Now().Add(time.Minute * 10).Unix()
+	claims["exp"] = time.Now().Add(time.Minute * 1080).Unix()
 	tokenString, err := token.SignedString(mySigningKey)
 
 	if err != nil {
@@ -166,11 +175,17 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 
 	fmt.Println("NewToken = ", actualtokenstring)
 
-	tokenFprint := []byte(actualtokenstring)
+	//tokenFprint := []byte(actualtokenstring)
+
+	var Gettokenanswer = Gettokenanswerstruct{t.Format(time.RFC3339), newuserid, login, password, dataanswer, actualtokenstring}
 
 	if autorizationok {
-		fmt.Fprint(w, fmt.Sprintf("Token request at [%s]\nUser:\nLogin: '%s'\nPassword: '%s'\nData answer is: %s\n", t.Format(time.RFC3339), login, password, dataanswer))
-		fmt.Fprint(w, fmt.Sprintf("Token: %s", tokenFprint))
+		// fmt.Fprint(w, fmt.Sprintf("Token request at [%s]\nUser:\nLogin: '%s'\nPassword: '%s'\nData answer is: %s\n", t.Format(time.RFC3339), login, password, dataanswer))
+		// fmt.Fprint(w, fmt.Sprintf("Token: %s", tokenFprint))
+		payload, _ := json.Marshal(Gettokenanswer)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(payload))
 	} else {
 
 		fmt.Fprint(w, " access denied ")
