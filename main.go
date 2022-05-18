@@ -55,13 +55,16 @@ var Pass string
 var ctx = context.Background()
 
 func main() {
-
+	r := my_redis.MyRedis{}
+	r.Name = "abc"
 	//redis start
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
+
+	fmt.Println(r)
 
 	userid := "user#125"
 	currentusertoken := "testtoken"
