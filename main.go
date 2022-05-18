@@ -15,7 +15,7 @@ import (
 	"github.com/gorilla/mux"
 
 	// redis
-
+	My_redis "github.com/ev/myhttp3authjson/Cache"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -55,8 +55,8 @@ var Pass string
 var ctx = context.Background()
 
 func main() {
-	r := my_redis.MyRedis{}
-	r.Name = "abc"
+	red := My_redis.MyRedis{}
+	red.Name = "abc"
 	//redis start
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
@@ -64,7 +64,7 @@ func main() {
 		DB:       0,  // use default DB
 	})
 
-	fmt.Println(r)
+	fmt.Println(red)
 
 	userid := "user#125"
 	currentusertoken := "testtoken"
