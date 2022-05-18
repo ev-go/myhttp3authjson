@@ -55,42 +55,40 @@ var Pass string
 var ctx = context.Background()
 
 func main() {
-	red := My_redis.MyRedis{}
-	red.Name = "abc"
+	My_redis.Main()
+
 	//redis start
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
+	// rdb := redis.NewClient(&redis.Options{
+	// 	Addr:     "localhost:6379",
+	// 	Password: "", // no password set
+	// 	DB:       0,  // use default DB
+	// })
 
-	fmt.Println(red)
+	// userid := "user#125"
+	// currentusertoken := "testtoken"
 
-	userid := "user#125"
-	currentusertoken := "testtoken"
+	// node := rdb.Set(ctx, userid, currentusertoken, 0).Err()
+	// if node != nil {
+	// 	panic(node)
+	// }
 
-	node := rdb.Set(ctx, userid, currentusertoken, 0).Err()
-	if node != nil {
-		panic(node)
-	}
+	// val, node := rdb.Get(ctx, userid).Result()
+	// if node == redis.Nil {
+	// 	fmt.Println("key1 does not exist")
+	// } else if node != nil {
+	// 	panic(node)
+	// } else {
+	// 	fmt.Println(userid, val)
+	// }
 
-	val, node := rdb.Get(ctx, userid).Result()
-	if node == redis.Nil {
-		fmt.Println("key1 does not exist")
-	} else if node != nil {
-		panic(node)
-	} else {
-		fmt.Println(userid, val)
-	}
-
-	val2, node := rdb.Get(ctx, "key2").Result()
-	if node == redis.Nil {
-		fmt.Println("key2 does not exist")
-	} else if node != nil {
-		panic(node)
-	} else {
-		fmt.Println("key2", val2)
-	}
+	// val2, node := rdb.Get(ctx, "key2").Result()
+	// if node == redis.Nil {
+	// 	fmt.Println("key2 does not exist")
+	// } else if node != nil {
+	// 	panic(node)
+	// } else {
+	// 	fmt.Println("key2", val2)
+	// }
 	// Output: key value
 	// key2 does not exist
 
