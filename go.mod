@@ -1,4 +1,4 @@
-module github.com/ev/myhttp3authjson
+module github.com/ev-go/myhttp3authjson
 
 go 1.14
 

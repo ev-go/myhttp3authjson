@@ -15,7 +15,7 @@ import (
 	"github.com/gorilla/mux"
 
 	// redis
-	My_redis "github.com/ev/myhttp3authjson/Cache"
+	My_redis "github.com/ev-go/myhttp3authjson/Cache"
 	"github.com/go-redis/redis/v8"
 )
 
