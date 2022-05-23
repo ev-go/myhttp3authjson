@@ -57,8 +57,8 @@ var ctx = context.Background()
 func main() {
 	My_redis.Main()
 
-	Log = "root111"
-	Pass = "1111"
+	Log = "root2"
+	Pass = "2"
 
 	r := mux.NewRouter()
 
