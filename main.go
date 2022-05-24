@@ -118,7 +118,7 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	fmt.Println("this is fresh token", tokenString)
 	var actualtokenstring string
 
 	if newuserautorizationdata == redis.Nil {
