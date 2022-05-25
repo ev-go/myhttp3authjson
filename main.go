@@ -57,8 +57,8 @@ var ctx = context.Background()
 func main() {
 	My_redis.Main()
 
-	Log = "root2"
-	Pass = "2"
+	Log = "root1"
+	Pass = "1"
 
 	r := mux.NewRouter()
 
@@ -144,8 +144,6 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	var Gettokenanswer = Gettokenanswerstruct{t.Format(time.RFC3339), newuserid, login, password, dataanswer, tokenString}
 
 	if autorizationok {
-		// fmt.Fprint(w, fmt.Sprintf("Token request at [%s]\nUser:\nLogin: '%s'\nPassword: '%s'\nData answer is: %s\n", t.Format(time.RFC3339), login, password, dataanswer))
-		// fmt.Fprint(w, fmt.Sprintf("Token: %s", tokenFprint))
 		payload, _ := json.Marshal(Gettokenanswer)
 
 		w.Header().Set("Content-Type", "application/json")
