@@ -155,7 +155,15 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 
 })
 
-var m = Message{"World", "Hello", Name{"Dmitry", "Victorovich"}, "79082706690", "393181839", 211}
+var m = Message{
+	"World",
+	"Hello",
+	Name{
+		"Dmitry",
+		"Victorovich"},
+	"79082706690",
+	"393181839",
+	211}
 
 var ProductsHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
