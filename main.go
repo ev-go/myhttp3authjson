@@ -103,16 +103,86 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 
 	val3, newuserautorizationdata := rdb.Get(ctx, newuserid).Result()
 
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
+	claims := jwt.MapClaims{}
 
-	claims["admin permissions?"] = "maybe"
-	claims["login"] = &Log
+	claims["exp"] = "1666007564"                           //time.Now().Add(time.Minute * 1080).Unix()
+	claims["iat"] = "1665989564"                           //time.Now().Add(time.Minute * 1080).Unix()
+	claims["jti"] = "7c86d08d-f61e-4c59-ab93-859f7a4c7398" //time.Now().Add(time.Minute * 1080).Unix()
+	claims["iss"] = "https://tpm-keycloak.boquar.tech/auth/realms/GS"
+	claims["aud"] = []string{
+		"realm-management",
+		"account",
+	}
 
-	claims["Data answer is"] = dataanswer
-	claims["Token request at"] = t
-	claims["ATTENTION!"] = "Привет, Макс :)"
-	claims["exp"] = time.Now().Add(time.Minute * 1080).Unix()
+	claims["sub"] = "bb0ad8de-2321-48cf-adb5-e213666e3b8d"
+	claims["typ"] = "Bearer"
+	claims["azp"] = "dtvadmin"
+	claims["session_state"] = "9b772692-facf-4b9f-aeda-661693952218"
+	claims["scope"] = "profile email"
+	claims["email_verified"] = "false"
+	claims["name"] = "Dmitry Tyulkin"
+	claims["preferred_username"] = "tyulkin.d"
+	claims["given_name"] = "Dmitry"
+	claims["family_name"] = "Tyulkin"
+	claims["email"] = "tyulkin.d@galileosky.ru"
+
+	claims["realm_access"] = map[string][]string{
+		"roles": {"offline_access", "admin", "uma_authorization"},
+	}
+	claims["acr"] = "1"
+	claims["resource_access"] = map[string]map[string][]string{
+		"realm-management": {
+			"roles": {
+				"view-identity-providers",
+				"view-realm",
+				"manage-identity-providers",
+				"impersonation",
+				"realm-admin",
+				"create-client",
+				"manage-users",
+				"query-realms",
+				"view-authorization",
+				"query-clients",
+				"query-users",
+				"manage-events",
+				"manage-realm",
+				"view-events",
+				"view-users",
+				"view-clients",
+				"manage-authorization",
+				"manage-clients",
+				"query-groups",
+			},
+		},
+		"account": {
+			"roles": {
+				"manage-account",
+				"manage-account-links",
+				"view-profile",
+			},
+		},
+	}
+
+	claims["session_state"] = "878f3ca4-a6d8-45dd-a494-955fb575282f"
+	//claims[""] = ""
+	//claims[""] = ""
+	//claims[""] = ""
+	//claims[""] = ""
+	//claims[""] = ""
+
+	//claims[""] = ""
+
+	//claims["admin permissions?"] = "maybe"
+	//claims["login"] = &Log
+	//
+	//claims["Data answer is"] = dataanswer
+	//claims["Token request at"] = t
+	//claims["ATTENTION!"] = "Привет, Макс :)"
+	//claims["exp"] = time.Now().Add(time.Minute * 1080).Unix()
+
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	//token.Header = map[string]interface{}{"kid": "JYyQHHvNTMBntTKc8-m5kooVWLk8hXKWDVrc56bw15E"}
+
 	tokenString, err := token.SignedString(mySigningKey)
 
 	if err != nil {
