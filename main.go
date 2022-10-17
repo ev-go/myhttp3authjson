@@ -103,6 +103,34 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 
 	val3, newuserautorizationdata := rdb.Get(ctx, newuserid).Result()
 
+	var key = `-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAuMVb3lrWKlmGIzTaJqtVJi2rPIy7/BkRKlAZ7Q1u0VlyOhzI
+cXq6zAGsh31uWeJBJFKrZdwA6b2LD5vscnuilHi0nfQZA5l+meQT9LJ7STnfJ7f8
+1CniBIhj5g6dOva9o/ljrLCmRSE4MjJRl3LkydvrHNokzicOAvieq4BYgHVJ2DC7
+r7cSWrHeIiBIEBb1zAghc1OxtkFkxumva2gmywq0zB0VfzsYrtSpWT77qSNA+UEH
+H+UCahefkun1uaBcOrEIPUh/j95N3rFTAdIAzFvDqLvLdQbmm/NT78O7izSGvJ1K
+4rM2fSiecALSROZqOeJy3pf2v6Caqlp2gdDHUQIDAQABAoIBAEeOBrnhq7bS3KOd
+wC3hhCQ442ubhOFoQ8GDK8clwJjKbvYaV3W69cQzkcEWzjl46YlLipzzyla61LPC
+ypq7Tob5B9lzwowmUWT/csr8o8oD42vaUMtJPQJMX4OkfTdsfpyV5AfokTuMVdr6
+qaZhFEEoLbEKud4sObzk023PUnbMTMyz2weQsmVLT9gm64K9GHzauoEDWGpr3Boz
++mEKo9rhySeK73qXqJFFATl0IB50GpdKondere/XofLQ2kqUB2fFEWIeRXawFd4u
+6yE5nxjhIvn9pqMhW48vPAYtwTUhY8OxpCwk9U+awBYMvkCnFlrO4TwCNFqE8j3/
+r6YN5VECgYEA2c0GqQVfwbcgB+8pLmd8H7dq+HqHToTA00pgNAsl/LRFUhkIVyY1
+YUJkr7nJ3ogzqyjNBz0K4JeaMbMxJRwbxu4SUBgmvc+3h0oa9ibTKtBH4KWAqwCC
+3TLQFoMXJCf+YJOL8ZNeqQz4rEpCVvJj86p9F4iTRhl5bd7mYqiEjusCgYEA2S1U
+19iAIEiSETtUWEzj/iAKOUZJKl4Kz6PVfUMT1lqodOHsNHexzcQs+W/LW/Z9Jr7u
+JtdC0ZZl2UCQ8PBTirsA/gimisnmVhx3mvKXOOO/Cf8RpN1/faTnQJj/Tu+h3aV7
+n53Av2wSQPoWnnNB9W515gTYqwiV//CX44lGS7MCgYEAmjSoj4kniB8hBZ0WOi24
+2zfg+/a80CH76F1TieWOysHUBtGEbze1OZxpb2WKgQ1MD9Y+e+6DQgr0eFXX6N9i
+51DuFFlVLLThy17zge5xOnHnQi3L0Mb24Kg2XooIG2hZmYU94xelQOnXMx0MpUTO
+8dl24e+n3kzxBZJ46cdIu2sCgYBzz5yizazlik16Ku07eSVLasKI8FYr5aJWP8Ok
+3JRDhmy2h5NyFzIVzDs/eMI09Cig9MgCpl/XbCA7zhZ8pWunWzmYPfyxniDaYqvV
+UPAbQjepmP9Lr2JBGiLHa88ZxOfITmqyH2mdqn/BbpuJO2U8//6W/pab/iQfK6mT
+iKyXyQKBgGb49CT+zi1VCa4jh0EH78odTwRb/PleAw25CLVSj35MqQCEA2/jU92g
+P8iTDU5mDNEaQMvMYN1fKiAPm6hiKp9/5Q02zQWNVzOywgc0L41Yb9K/SqxGwITa
+dFwwxhKgBqzgCeIpvKLCGrhMztzPjUL9o4MSdNa92vajcilr8ld6
+-----END RSA PRIVATE KEY-----`
+
 	token := jwt.New(jwt.SigningMethodRS256)
 
 	claims := jwt.MapClaims{}
@@ -175,7 +203,20 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 
 	token.Claims = claims
 
-	tokenString, err := token.SignedString(mySigningKey)
+	//signBytes := []byte("MIIBOgIBAAJBAKj34GkxFhD90vcNLYLInFEX6Ppy1tPf9Cnzj4p4WGeKLs1Pt8QuKUpRKfFLfRYC9AIKjbJTWit+CqvjWYzvQwECAwEAAQJAIJLixBy2qpFoS4DSmoEmo3qGy0t6z09AIJtH+5OeRV1be+N4cDYJKffGzDa88vQENZiRm0GRq6a+HPGQMd2kTQIhAKMSvzIBnni7ot/OSie2TmJLY4SwTQAevXysE2RbFDYdAiEBCUEaRQnMnbp79mxDXDf6AU0cN/RPBjb9qSHDcWZHGzUCIG2Es59z8ugGrDY+pxLQnwfotadxd+Uyv/Ow5T0q5gIJAiEAyS4RaI9YG8EWx/2w0T67ZUVAw8eOMB6BIUg0Xcu+3okCIBOs/5OiPgoTdSy7bcF9IGpSE8ZgGKzgYQVZeN97YE00")
+	//signKey, err := jwt.ParseRSAPrivateKeyFromPEM(signBytes)
+
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+
+	//tokenString, err := token.SignedString(key)
+
+	pkey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(key))
+	if err != nil {
+		log.Fatal(err)
+	}
+	tokenString, err := token.SignedString(pkey)
 
 	if err != nil {
 		log.Fatal(err)
