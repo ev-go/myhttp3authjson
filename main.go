@@ -46,7 +46,7 @@ var jwtMiddleware = jwtmiddleware.New(jwtmiddleware.Options{
 	ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 		return mySigningKey, nil
 	},
-	SigningMethod: jwt.SigningMethodHS256,
+	SigningMethod: jwt.SigningMethodRS256,
 })
 
 var Log string
@@ -102,6 +102,8 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	})
 
 	val3, newuserautorizationdata := rdb.Get(ctx, newuserid).Result()
+
+	token := jwt.New(jwt.SigningMethodRS256)
 
 	claims := jwt.MapClaims{}
 
@@ -164,24 +166,14 @@ var GetTokenHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	}
 
 	claims["session_state"] = "878f3ca4-a6d8-45dd-a494-955fb575282f"
-	//claims[""] = ""
-	//claims[""] = ""
-	//claims[""] = ""
-	//claims[""] = ""
-	//claims[""] = ""
 
-	//claims[""] = ""
+	//token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	token.Header = map[string]interface{}{"kid": "JYyQHHvNTMBntTKc8-m5kooVWLk8hXKWDVrc56bw15E",
+		"alg": "HS256",
+		"typ": "JWT",
+	}
 
-	//claims["admin permissions?"] = "maybe"
-	//claims["login"] = &Log
-	//
-	//claims["Data answer is"] = dataanswer
-	//claims["Token request at"] = t
-	//claims["ATTENTION!"] = "Привет, Макс :)"
-	//claims["exp"] = time.Now().Add(time.Minute * 1080).Unix()
-
-	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-	//token.Header = map[string]interface{}{"kid": "JYyQHHvNTMBntTKc8-m5kooVWLk8hXKWDVrc56bw15E"}
+	token.Claims = claims
 
 	tokenString, err := token.SignedString(mySigningKey)
 
