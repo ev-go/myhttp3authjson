@@ -111,55 +111,27 @@ MIIBUwIBADANBgkqhkiG9w0BAQEFAASCAT0wggE5AgEAAkEAqaaVjLmQXez9pc0/0LjUgjScrwap5XYK
 
 	claims := jwt.MapClaims{}
 
-	claims["exp"] = "1666007564"                           //time.Now().Add(time.Minute * 1080).Unix()
-	claims["iat"] = "1665989564"                           //time.Now().Add(time.Minute * 1080).Unix()
-	claims["jti"] = "7c86d08d-f61e-4c59-ab93-859f7a4c7398" //time.Now().Add(time.Minute * 1080).Unix()
+	claims["exp"] = "1663927554"                           //time.Now().Add(time.Minute * 1080).Unix()
+	claims["iat"] = "1663927254"                           //time.Now().Add(time.Minute * 1080).Unix()
+	claims["jti"] = "14ccf931-544d-4f49-82ce-2e6a3ca0c1ec" //time.Now().Add(time.Minute * 1080).Unix()
 	claims["iss"] = "https://tpm-keycloak.boquar.tech/auth/realms/GS"
-	claims["aud"] = []string{
-		"realm-management",
-		"account",
-	}
+	//claims["aud"] = []string{
+	//	"realm-management",
+	//	"account",
+	//}
 
-	claims["sub"] = "bb0ad8de-2321-48cf-adb5-e213666e3b8d"
+	claims["aud"] = "account"
+
+	claims["sub"] = "c5074793-9d82-478c-9853-125c04bdb626"
 	claims["typ"] = "Bearer"
-	claims["azp"] = "dtvadmin"
-	claims["session_state"] = "9b772692-facf-4b9f-aeda-661693952218"
-	claims["scope"] = "profile email"
-	claims["email_verified"] = "false"
-	claims["name"] = "Dmitry Tyulkin"
-	claims["preferred_username"] = "tyulkin.d"
-	claims["given_name"] = "Dmitry"
-	claims["family_name"] = "Tyulkin"
-	claims["email"] = "tyulkin.d@galileosky.ru"
-
-	claims["realm_access"] = map[string][]string{
-		"roles": {"offline_access", "admin", "uma_authorization"},
-	}
+	claims["azp"] = "ng-frontend"
+	claims["session_state"] = "77f26529-fbd5-4cfb-a872-561c1267c890"
 	claims["acr"] = "1"
+	claims["realm_access"] = map[string][]string{
+		"roles": {"offline_access", "admin", "uma_authorization", "support"},
+	}
+
 	claims["resource_access"] = map[string]map[string][]string{
-		"realm-management": {
-			"roles": {
-				"view-identity-providers",
-				"view-realm",
-				"manage-identity-providers",
-				"impersonation",
-				"realm-admin",
-				"create-client",
-				"manage-users",
-				"query-realms",
-				"view-authorization",
-				"query-clients",
-				"query-users",
-				"manage-events",
-				"manage-realm",
-				"view-events",
-				"view-users",
-				"view-clients",
-				"manage-authorization",
-				"manage-clients",
-				"query-groups",
-			},
-		},
 		"account": {
 			"roles": {
 				"manage-account",
@@ -169,7 +141,25 @@ MIIBUwIBADANBgkqhkiG9w0BAQEFAASCAT0wggE5AgEAAkEAqaaVjLmQXez9pc0/0LjUgjScrwap5XYK
 		},
 	}
 
+	claims["scope"] = "profile email"
+	claims["email_verified"] = "false"
+	claims["group_uuids"] = []string{
+		"0da3b22f-ec3f-4383-bc25-480b6dcb82a1",
+		"5ebc3080-1023-47dd-8927-d704ef377e9d",
+	}
+	claims["customer_uuid"] = "0da3b22f-ec3f-4383-bc25-480b6dcb82a1"
+	claims["name"] = "Инженер Техподдержки"
+	claims["preferred_username"] = "support"
+	claims["given_name"] = "Инженер"
+	claims["family_name"] = "Техподдержки"
+	claims["email"] = "example@test.ru"
+
 	claims["session_state"] = "878f3ca4-a6d8-45dd-a494-955fb575282f"
+
+	claims["group"] = []string{
+		"/Galileosky",
+		"/Galileosky/technical support",
+	}
 
 	//token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 	token.Header = map[string]interface{}{"kid": "JYyQHHvNTMBntTKc8-m5kooVWLk8hXKWDVrc56bw15E",
